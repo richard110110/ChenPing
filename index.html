@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Geolocation</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="main.css">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    </style>
+</head>
+
+<body>
+    <div class="map-wrapper" id="map"></div>
+    <div class="nearby">
+        <div class="current-weather"></div>
+
+        <div class="nearbyHotel"></div>
+
+        <div class="nearbyRestaurant"></div>
+
+    </div>
+
+    <div class="search">
+        <div class="search_weather"></div>
+
+        <div class="search_Hotel"></div>
+
+        <div class="search_Restaurant"></div>
+
+    </div>
+
+    <script src="app.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPUUiNkS8IVOhyqfGNb-3tt9XLspxaX3Y&libraries=places&callback=initMap"></script>
+</body>
+
+</html>

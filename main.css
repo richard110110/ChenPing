@@ -1,0 +1,20 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.map-wrapper {
+    overflow: scroll;
+    position: fixed;
+    /* left: 0;
+    bottom: 0; */
+    width: 100%;
+    min-width: 200px;
+    height: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 400px;
+}
