@@ -67,10 +67,7 @@ function initMap() {
                         if (results[0]) {
                             var marker = new google
                                 .maps
-                                .Marker({
-                                    position: latlng,
-                                    map: map
-                                });
+                                .Marker({ position: latlng, map: map });
                             currentWindow.setContent(results[0].formatted_address);
                             currentWindow.open(map, marker);
                         } else {
@@ -139,11 +136,7 @@ function showPosition(position) {
 
         })
         .then(function(restaurantData) {
-            console.log(restaurantData);
-            console.log(restaurantData.location.city_name);
-            console.log(restaurantData.location.latitude);
-            console.log(restaurantData.location.longitude);
-            console.log(restaurantData.nearby_restaurants);
+            showRestaurant(restaurantData);
 
             openweathermap_url = `https://api.openweathermap.org/data/2.5/forecast?lat=${restaurantData.location.latitude}&lon=${restaurantData.location.longitude}&appid=${weatherKey}`;
             fetch(openweathermap_url).then(function(weather) {
@@ -173,9 +166,31 @@ function convertKelvinToCelsius(kelvin) {
     }
 }
 
+function validateImage(url, id) {
+
+    if (url == "") {
+        fetch(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${id}`, {
+                method: "GET",
+                headers: {
+                    "user-key": zomatoKey
+                }
+
+            }).then(function(restaurant_Detail) {
+                return restaurant_Detail.json();
+
+            })
+            .then(function(data) {
+                console.log(data.featured_image);
+
+            })
+
+    } else {
+        return url;
+    }
+}
+
 function showWeather(weatherData) {
-    console.log(weatherData.list);
-    console.log(weatherData.list.length);
+
 
     var i;
     for (i = 0; i < weatherData.list.length; i++) {
@@ -183,15 +198,6 @@ function showWeather(weatherData) {
 
             var weatherContainer = document.createElement('div');
             weatherContainer.setAttribute("id", "daily-weather");
-
-            console.log(weatherData.list[i]);
-
-            console.log(weatherData.list[i].dt_txt.split(" ")[0]);
-            console.log(convertKelvinToCelsius(weatherData.list[i].main.temp));
-            console.log(weatherData.list[i].weather[0].description);
-
-            console.log(weatherData.list[i].weather[0].icon);
-            console.log(weatherData.list[i].wind.speed);
 
             weatherContainer.innerHTML = `<div class="weather-icon" style="background-image:url(http://openweathermap.org/img/wn/${weatherData.list[i].weather[0].icon}@2x.png)"></div>` + `<div class="weather-Description">${weatherData.list[i].weather[0].description}</div>` + `<div class="temperature-Data">${convertKelvinToCelsius(weatherData.list[i].main.temp)}°</div>` + `<div class="wind-Container">` + `<i class="fas fa-wind"></i>` + `<div class="wind-Info">${weatherData.list[i].wind.speed}</div>` + `</div>` + `<div class="date-Container">` + `<i class="fas fa-calendar-alt"></i>` + `<div class="date-Info">${weatherData
                 .list[i]
@@ -207,8 +213,93 @@ function showWeather(weatherData) {
 
 }
 
-function showRestaurant(restaurantData) {}
+function showRestaurant(restaurantData) {
+    console.log(restaurantData);
+    console.log(restaurantData.nearby_restaurants);
+    console.log(restaurantData.nearby_restaurants.length);
 
-function showAirPollution() {}
 
-function showFlightData() {}
+    var restaurantContainer = document.createElement('div');
+    restaurantContainer.setAttribute("id", "localRestaurant");
+    restaurantContainer.setAttribute("class", "nearbyRestaurant");
+
+
+    for (let i = 0; i < restaurantData.nearby_restaurants.length; i++) {
+
+
+
+
+        console.log(restaurantData.nearby_restaurants[i].restaurant.name);
+        console.log(restaurantData.nearby_restaurants[i].restaurant.location.address);
+        console.log(restaurantData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating);
+        console.log(restaurantData.nearby_restaurants[i].restaurant.user_rating.rating_color);
+        console.log(restaurantData.nearby_restaurants[i].restaurant.featured_image);
+
+        // validateImage(restaurantData.nearby_restaurants[i].restaurant.featured_image, restaurantData.nearby_restaurants[i].restaurant.id);
+
+        // var elements = document.getElementById("each-Restaurant");
+
+
+        fetch(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${restaurantData.nearby_restaurants[i].restaurant.id}`, {
+                method: "GET",
+                headers: {
+                    "user-key": zomatoKey
+                }
+
+            }).then(function(restaurant_Detail) {
+                return restaurant_Detail.json();
+
+            })
+            .then(function(data) {
+                // console.log(data);
+                console.log(data.featured_image);
+
+                restaurantContainer.innerHTML += `<div id="each-Restaurant"><div class="featured-Image" style="background-image:url(${data.featured_image})">` +
+                    `<div class="rating" style="background-color:#${restaurantData.nearby_restaurants[i].restaurant.user_rating.rating_color}">` +
+                    `<div class="rates">${restaurantData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating}</div></div>` +
+                    `</div>` +
+                    `<div class="restaurant-Name-Container">` +
+                    `<i class="fas fa-utensils"></i>` +
+                    `<div class="restaurant-Name"><a href="${restaurantData.nearby_restaurants[i].restaurant.url}">${restaurantData.nearby_restaurants[i].restaurant.name}</a></div>` +
+                    `</div>` +
+
+                    `<div class="restaurant-Address-Container">` +
+                    `<i class="fas fa-map-marker-alt"></i>` +
+                    `<div class="restaurant-Address">${restaurantData.nearby_restaurants[i].restaurant.location.address}</div>` +
+                    `</div>` +
+
+                    `<div class="restaurant-Cuisine-Container">` +
+                    `<div class="restaurant-Cuisine">Cuisine: ${restaurantData.nearby_restaurants[i].restaurant.cuisines}</div>` +
+                    `</div>` +
+
+
+                    `<div class="restaurant-Cost-Container">` +
+                    `<i class="fas fa-dollar-sign"></i>` +
+                    `<div class="restaurant-Cost">${restaurantData.nearby_restaurants[i].restaurant.average_cost_for_two}</div>` +
+                    `</div>` +
+
+                    `</div>`;
+
+
+
+
+
+            })
+
+
+
+
+
+        document
+            .getElementById("restaurant")
+            .appendChild(restaurantContainer);
+
+
+
+
+    }
+}
+
+
+
+function showHotel() {}

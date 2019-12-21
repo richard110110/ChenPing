@@ -10,6 +10,7 @@ html,
 body {
     margin: 0;
     padding: 0;
+    background: #F3F3F3;
 }
 
 .map-wrapper {
@@ -36,6 +37,7 @@ body {
     /* overflow: scroll; */
     justify-items: center;
     justify-content: center;
+    border: 1px solid #e7e7e7;
 }
 
 #daily-weather {
@@ -66,12 +68,12 @@ body {
     display: inline-flex;
     font-size: 20px;
     margin-right: 10px;
-    color: white;
+    color: black;
 }
 
 .wind-Info {
     display: inline-flex;
-    color: white;
+    color: black;
     font-family: "Jotia W00", sans-serif;
     font-size: 25px;
 }
@@ -84,28 +86,147 @@ body {
     display: inline-flex;
     font-size: 20px;
     margin-right: 10px;
-    color: white;
+    color: black;
 }
 
 .date-Info {
     display: inline-flex;
-    color: white;
+    color: black;
     font-family: "Jotia W00", sans-serif;
     font-size: 25px;
 }
 
 .weather-Description {
     /* display: inline-block; */
-    color: white;
+    color: black;
     font-family: "Jotia W00", sans-serif;
     font-size: 25px;
 }
 
 .temperature-Data {
-    color: white;
+    color: black;
     font-family: "Jotia W00", sans-serif;
     font-size: 50px;
     margin-top: 20px;
+}
+
+.nearbyRestaurant {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: white;
+    min-height: 400px;
+    /* overflow: scroll; */
+    justify-items: center;
+    justify-content: center;
+    border: 1px solid #e7e7e7;
+}
+
+#each-Restaurant {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 370px;
+    min-width: 320px;
+    min-height: 100px;
+    text-align: center;
+    margin: 50px;
+    background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(222, 36, 68, 1) 51%, rgba(253, 29, 29, 1) 74%, rgba(252, 176, 69, 1) 100%);
+}
+
+.featured-Image {
+    display: inline-block;
+    width: 300px;
+    height: 200px;
+    background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin: 0;
+}
+
+.rating {
+    top: 0;
+    left: 0;
+    max-width: 40px;
+    max-height: 40px;
+}
+
+.rates {
+    color: black;
+    font-family: "Jotia W00", sans-serif;
+    font-size: 20px;
+    text-align: center;
+}
+
+.restaurant-Name-Container {
+    margin-top: 20px;
+}
+
+.restaurant-Name-Container i {
+    display: inline-flex;
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+.restaurant-Name {
+    display: inline-flex;
+    color: black;
+    font-family: "Jotia W00", sans-serif;
+    font-size: 20px;
+}
+
+.restaurant-Name a {
+    text-decoration: none;
+    display: inline-flex;
+    color: black;
+    font-family: "Jotia W00", sans-serif;
+    font-size: 20px;
+}
+
+.restaurant-Address-Container {
+    margin-top: 20px;
+}
+
+.restaurant-Address-Container i {
+    display: inline-flex;
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+.restaurant-Address {
+    display: inline-flex;
+    color: black;
+    font-family: "Jotia W00", sans-serif;
+    font-size: 20px;
+}
+
+.restaurant-Cuisine-Container {
+    margin-top: 20px;
+}
+
+.restaurant-Cuisine {
+    display: inline-flex;
+    color: black;
+    font-family: "Jotia W00", sans-serif;
+    font-size: 20px;
+}
+
+.restaurant-Cost-Container {
+    margin-top: 20px;
+}
+
+.restaurant-Cost-Container i {
+    display: inline-flex;
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+.restaurant-Cost {
+    display: inline-flex;
+    color: black;
+    font-family: "Jotia W00", sans-serif;
+    font-size: 20px;
 }
 
 
