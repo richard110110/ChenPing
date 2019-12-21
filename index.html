@@ -3,9 +3,11 @@
 
 <head>
     <title>Geolocation</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="main.css">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="main.css" />
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
     <style>
         /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -13,14 +15,16 @@
 </head>
 
 <body>
+
     <div class="map-wrapper" id="map"></div>
     <div class="nearby">
-        <div class="current-weather"></div>
+        <div class="weather-wrapper" id="localWeather">
+
+        </div>
 
         <div class="nearbyHotel"></div>
 
         <div class="nearbyRestaurant"></div>
-
     </div>
 
     <div class="search">
@@ -29,7 +33,6 @@
         <div class="search_Hotel"></div>
 
         <div class="search_Restaurant"></div>
-
     </div>
 
     <script src="app.js"></script>
