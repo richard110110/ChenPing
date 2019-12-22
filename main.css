@@ -33,7 +33,6 @@ body {
     flex-wrap: wrap;
     background-color: white;
     min-height: 400px;
-    max-height: 900px;
     /* overflow: scroll; */
     justify-items: center;
     justify-content: center;
@@ -47,7 +46,8 @@ body {
     min-height: 100px;
     text-align: center;
     margin: 50px;
-    background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(222, 36, 68, 1) 51%, rgba(253, 29, 29, 1) 74%, rgba(252, 176, 69, 1) 100%);
+    background: rgba(255, 255, 255, 0.5);
+    /* background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(222, 36, 68, 1) 51%, rgba(253, 29, 29, 1) 74%, rgba(252, 176, 69, 1) 100%); */
 }
 
 .weather-icon {
@@ -124,12 +124,13 @@ body {
 
 #each-Restaurant {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 370px;
-    min-width: 320px;
+    max-width: 340px;
+    min-width: 340px;
     min-height: 100px;
     text-align: center;
     margin: 50px;
-    background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(222, 36, 68, 1) 51%, rgba(253, 29, 29, 1) 74%, rgba(252, 176, 69, 1) 100%);
+    background: rgba(255, 255, 255, 0.5);
+    /* background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(222, 36, 68, 1) 51%, rgba(253, 29, 29, 1) 74%, rgba(252, 176, 69, 1) 100%); */
 }
 
 .featured-Image {
@@ -216,10 +217,12 @@ body {
 }
 
 .restaurant-Cost-Container i {
+    font-family: "Jotia W00", sans-serif;
     display: inline-flex;
     font-size: 20px;
     margin-right: 10px;
     color: black;
+    font-weight: lighter;
 }
 
 .restaurant-Cost {
@@ -227,6 +230,74 @@ body {
     color: black;
     font-family: "Jotia W00", sans-serif;
     font-size: 20px;
+}
+
+.nearbyHotel {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: white;
+    min-height: 400px;
+    /* overflow: scroll; */
+    justify-items: center;
+    justify-content: center;
+    border: 1px solid #e7e7e7;
+}
+
+.hotel-info {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: white;
+    min-height: 400px;
+    /* overflow: scroll; */
+    justify-items: center;
+    justify-content: center;
+    border: 1px solid #e7e7e7;
+}
+
+#each-Hotel {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    min-width: 340px;
+    min-height: 100px;
+    text-align: center;
+    margin: 50px;
+    background: rgba(255, 255, 255, 0.5);
+    /* background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(222, 36, 68, 1) 51%, rgba(253, 29, 29, 1) 74%, rgba(252, 176, 69, 1) 100%); */
+}
+
+.hotel-Image-Container {
+    position: relative;
+    margin: 0;
+    overflow-x: scroll;
+}
+
+#scrollmenu {
+    background-color: #333;
+    overflow-x: scroll;
+    white-space: nowrap;
+    bottom: 0;
+    display: inline-flex;
+    height: auto;
+    position: relative;
+}
+
+#scrollmenu .hotel-Image {
+    display: inline-block;
+    text-decoration: none;
+    vertical-align: middle;
+    height: auto;
+    width: auto;
+    padding: 5px 0;
+}
+
+.hotel-Image .hotelImageShow {
+    display: inline-block;
+    text-decoration: none;
+    vertical-align: middle;
+    height: auto;
+    width: auto;
+    padding: 5px 0;
 }
 
 

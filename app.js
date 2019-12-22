@@ -152,7 +152,8 @@ function showPosition(position) {
                     return hotel.json();
                 })
                 .then(function(hotelData) {
-                    console.log(hotelData.results);
+
+                    showHotel(hotelData.results.hotels);
                 })
 
         })
@@ -175,7 +176,8 @@ function validateImage(url, id) {
                     "user-key": zomatoKey
                 }
 
-            }).then(function(restaurant_Detail) {
+            })
+            .then(function(restaurant_Detail) {
                 return restaurant_Detail.json();
 
             })
@@ -190,7 +192,6 @@ function validateImage(url, id) {
 }
 
 function showWeather(weatherData) {
-
 
     var i;
     for (i = 0; i < weatherData.list.length; i++) {
@@ -218,28 +219,11 @@ function showRestaurant(restaurantData) {
     console.log(restaurantData.nearby_restaurants);
     console.log(restaurantData.nearby_restaurants.length);
 
-
     var restaurantContainer = document.createElement('div');
     restaurantContainer.setAttribute("id", "localRestaurant");
     restaurantContainer.setAttribute("class", "nearbyRestaurant");
 
-
     for (let i = 0; i < restaurantData.nearby_restaurants.length; i++) {
-
-
-
-
-        console.log(restaurantData.nearby_restaurants[i].restaurant.name);
-        console.log(restaurantData.nearby_restaurants[i].restaurant.location.address);
-        console.log(restaurantData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating);
-        console.log(restaurantData.nearby_restaurants[i].restaurant.user_rating.rating_color);
-        console.log(restaurantData.nearby_restaurants[i].restaurant.featured_image);
-
-        // validateImage(restaurantData.nearby_restaurants[i].restaurant.featured_image, restaurantData.nearby_restaurants[i].restaurant.id);
-
-        // var elements = document.getElementById("each-Restaurant");
-
-
         fetch(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${restaurantData.nearby_restaurants[i].restaurant.id}`, {
                 method: "GET",
                 headers: {
@@ -252,7 +236,7 @@ function showRestaurant(restaurantData) {
             })
             .then(function(data) {
                 // console.log(data);
-                console.log(data.featured_image);
+                // console.log(data.featured_image);
 
                 restaurantContainer.innerHTML += `<div id="each-Restaurant"><div class="featured-Image" style="background-image:url(${data.featured_image})">` +
                     `<div class="rating" style="background-color:#${restaurantData.nearby_restaurants[i].restaurant.user_rating.rating_color}">` +
@@ -261,45 +245,83 @@ function showRestaurant(restaurantData) {
                     `<div class="restaurant-Name-Container">` +
                     `<i class="fas fa-utensils"></i>` +
                     `<div class="restaurant-Name"><a href="${restaurantData.nearby_restaurants[i].restaurant.url}">${restaurantData.nearby_restaurants[i].restaurant.name}</a></div>` +
-                    `</div>` +
-
-                    `<div class="restaurant-Address-Container">` +
+                    `</div>` + `<div class="restaurant-Address-Container">` +
                     `<i class="fas fa-map-marker-alt"></i>` +
                     `<div class="restaurant-Address">${restaurantData.nearby_restaurants[i].restaurant.location.address}</div>` +
                     `</div>` +
-
                     `<div class="restaurant-Cuisine-Container">` +
                     `<div class="restaurant-Cuisine">Cuisine: ${restaurantData.nearby_restaurants[i].restaurant.cuisines}</div>` +
-                    `</div>` +
-
-
-                    `<div class="restaurant-Cost-Container">` +
-                    `<i class="fas fa-dollar-sign"></i>` +
+                    `</div>` + `<div class="restaurant-Cost-Container">` +
+                    `<i>${restaurantData.nearby_restaurants[i].restaurant.currency}</i>` +
                     `<div class="restaurant-Cost">${restaurantData.nearby_restaurants[i].restaurant.average_cost_for_two}</div>` +
                     `</div>` +
-
                     `</div>`;
 
-
-
-
-
             })
-
-
-
-
 
         document
             .getElementById("restaurant")
             .appendChild(restaurantContainer);
 
-
-
-
     }
 }
 
+function generateHotelPhoto(hotelPhoto) {
+    var hotelImage = document.createElement('div');
+    hotelImage.setAttribute("id", "scrollmenu");
+
+    for (let i = 0; i < hotelPhoto.length; i++) {
+        hotelImage.innerHTML += `<div class="hotelImageShow" style="background-image:url(${hotelPhoto[i].url})"></div>`
+    }
+    console.log(hotelImage.innerHTML);
+
+    // document.getElementById(element).appendChild(hotelImage);
+}
+
+function showHotel(hotelData) {
+    console.log(hotelData.length);
+    var hotelContainer = document.createElement('div');
+    hotelContainer.setAttribute("id", "hotelList");
+    hotelContainer.setAttribute("class", "hotel-info");
 
 
-function showHotel() {}
+
+    for (let i = hotelData.length - 1; i < hotelData.length; i++) {
+        console.log(hotelData[i].locationId);
+
+
+
+        fetch(`http://engine.hotellook.com/api/v2/static/hotels.json?locationId=${hotelData[i].locationId}&token=${hotelKey}`).then(function(hotel) {
+            return hotel.json();
+        }).then(function(hotelList) {
+            console.log(hotelList);
+            console.log(hotelList.hotels);
+            console.log(hotelList.hotels.length);
+            for (let j = 0; j < hotelList.hotels.length; j++) {
+                if (hotelList.hotels[j].stars != 0 && hotelList.hotels[j].pricefrom != 0 && hotelList.hotels[j].rating != 0) {
+                    console.log(hotelList.hotels[j]);
+
+                    console.log(hotelList.hotels[j].photos);
+
+
+
+                    hotelContainer.innerHTML += `<div id="each-Hotel">` +
+                        `<div class="hotel-Image-Container">` +
+                        generateHotelPhoto(hotelList.hotels[j].photos) +
+
+                        // `<div class="scrollmenu">` +
+
+                        // `<div class="hotel-Image">` +
+                        // `</div>` +
+                        // `</div>` +
+                        `</div>` +
+                        `</div>`;
+
+                }
+            }
+
+        })
+        document.getElementById("localHotel").appendChild(hotelContainer);
+
+    }
+}
