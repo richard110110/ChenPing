@@ -238,7 +238,7 @@ body {
     flex-wrap: wrap;
     background-color: white;
     min-height: 400px;
-    overflow: scroll;
+    /* overflow: scroll; */
     justify-items: center;
     justify-content: center;
     border: 1px solid #e7e7e7;
@@ -250,11 +250,11 @@ body {
     flex-wrap: wrap;
     background-color: white;
     min-height: 400px;
-    overflow: scroll;
+    /* overflow: scroll; */
     justify-items: center;
     justify-content: center;
-    border: 1px solid #e7e7e7;
-    max-width: 2048px;
+    /* border: 1px solid #e7e7e7; */
+    max-width: 2900px;
     overflow-x: scroll;
 }
 

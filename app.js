@@ -269,9 +269,11 @@ function showRestaurant(restaurantData) {
 
 function generateHotelPhoto(hotelPhoto) {
 
-    var hotelImage = document.getElementsByClassName("hotelImageShow");
 
-    for (let i = 0; i < hotelPhoto.length; i++) {
+
+    for (let i = 0; i < 10; i++) {
+        var hotelImage = document.getElementsByClassName("hotelImageShow");
+
         hotelImage.innerHTML += `<div class="hotelImageShow" style="background-image:url('${hotelPhoto[i].url}')"></div>`
     }
 
@@ -279,10 +281,22 @@ function generateHotelPhoto(hotelPhoto) {
 
 
 
-    console.log(hotelImage.innerHTML);
 
-    var node = document.getElementsByClassName("hotelImageShow").length;
-    console.log("this is node: " + node);
+    // console.log(hotelImage.innerHTML);
+
+    // var listLength = document.getElementById("hotelList").childElementCount;
+    // console.log(listLength);
+
+    // var node = document.getElementsByClassName("hotelImageShow").length;
+    // console.log("this is node: " + node);
+
+    // for (let k = listLength; k > listLength - 2; k--) {
+    //     if (k > 0) {
+    //         document.getElementById("hotelList").removeChild(listLength.childNodes[k]);
+
+    //     }
+    // }
+
 
     return hotelImage.innerHTML;
     // console.log(hotelImage.innerHTML);
@@ -310,7 +324,7 @@ function showHotel(hotelData) {
             console.log(hotelList.hotels);
             console.log(hotelList.hotels.length);
             for (let j = 0; j < hotelList.hotels.length; j++) {
-                if (hotelList.hotels[j].stars != 0 && hotelList.hotels[j].pricefrom != 0 && hotelList.hotels[j].rating != 0) {
+                if (hotelList.hotels[j].stars != 0 && hotelList.hotels[j].pricefrom != 0 && hotelList.hotels[j].rating != 0 && hotelList.hotels[j].photos.length > 10) {
                     console.log(hotelList.hotels[j]);
 
                     console.log(hotelList.hotels[j].photos);
@@ -323,15 +337,26 @@ function showHotel(hotelData) {
 
                     hotelContainer.innerHTML += `<div id="each-Hotel">` +
                         `<div class="hotel-Image-Container">` +
-                        // generateHotelPhoto(hotelList.hotels[j].photos) +
                         `<div id="scrollmenu">` +
-                        // `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[0].url}')"></div>` +
-                        generateHotelPhoto(hotelList.hotels[j].photos) +
+                        // generateHotelPhoto(hotelList.hotels[j].photos) +
+
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[0].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[1].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[2].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[3].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[4].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[5].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[6].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[7].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[8].url}')"></div>` +
+                        `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[9].url}')"></div>` +
+
 
                         `</div>` +
                         `</div>` +
                         `</div>`;
-                    console.log(hotelList.hotels[j].photos[0].url);
+                    // console.log(hotelList.hotels[j].photos[0].url);
+
 
 
 
@@ -341,6 +366,14 @@ function showHotel(hotelData) {
 
         })
         document.getElementById("localHotel").appendChild(hotelContainer);
+        // var listLength = document.getElementById("scrollmenu").childElementCount;
+        // console.log(listLength);
 
     }
+    // var list = document.getElementById("hotelList");
+    // var listLength = document.getElementById("hotelList").childElementCount;
+    // for (let k = 0; k < listLength - 1; k++) {
+    //     list.removeChild(list.childNodes[k]);
+    // }
+    // console.log(listLength);
 }
