@@ -149,7 +149,7 @@ function showPosition(position) {
                     showWeather(weatherData);
 
                 })
-            fetch(`http://engine.hotellook.com/api/v2/lookup.json?query=${restaurantData.location.latitude},${restaurantData.location.longitude}&lang=en&lookFor=hotel&limit=10&token=${hotelKey}`).then(function(hotel) {
+            fetch(`https://engine.hotellook.com/api/v2/lookup.json?query=${restaurantData.location.latitude},${restaurantData.location.longitude}&lang=en&lookFor=hotel&limit=10&token=${hotelKey}`).then(function(hotel) {
                     return hotel.json();
                 })
                 .then(function(hotelData) {
