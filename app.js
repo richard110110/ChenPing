@@ -303,7 +303,7 @@ function showHotel(hotelData) {
 
 
 
-        fetch(`http://engine.hotellook.com/api/v2/static/hotels.json?locationId=${hotelData[i].locationId}&token=${hotelKey}`).then(function(hotel) {
+        fetch(`https://engine.hotellook.com/api/v2/static/hotels.json?locationId=${hotelData[i].locationId}&token=${hotelKey}`).then(function(hotel) {
             return hotel.json();
         }).then(function(hotelList) {
             console.log(hotelList);
