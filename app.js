@@ -1,8 +1,8 @@
-const zomatoKey = "2a352dc74247e7f44da46d2405cd9f02";
 const weatherKey = "b40fcac67f4795e36979264e1d4bb3f4";
 const googleKey = "AIzaSyBPUUiNkS8IVOhyqfGNb-3tt9XLspxaX3Y";
 const hotelKey = "3e6ae58f1f4304d575cb1a739147986f";
 const airPollution = "0f14d8c1525148f2f5e51464ccbf5ed4e743e8d0";
+const zomatoKey = "2a352dc74247e7f44da46d2405cd9f02";
 
 // if (navigator.geolocation) {     navigator         .geolocation
 // .getCurrentPosition(showPosition); }
@@ -116,6 +116,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
+
 function showPosition(position) {
     var zomato_url = `https://developers.zomato.com/api/v2.1/geocode?lat=${position.coords.latitude}&lon=${position.coords.longitude}&count=20`;
 
@@ -167,29 +168,29 @@ function convertKelvinToCelsius(kelvin) {
     }
 }
 
-function validateImage(url, id) {
+// function validateImage(url, id) {
 
-    if (url == "") {
-        fetch(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${id}`, {
-                method: "GET",
-                headers: {
-                    "user-key": zomatoKey
-                }
+//     if (url == "") {
+//         fetch(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${id}`, {
+//                 method: "GET",
+//                 headers: {
+//                     "user-key": zomatoKey
+//                 }
 
-            })
-            .then(function(restaurant_Detail) {
-                return restaurant_Detail.json();
+//             })
+//             .then(function(restaurant_Detail) {
+//                 return restaurant_Detail.json();
 
-            })
-            .then(function(data) {
-                console.log(data.featured_image);
+//             })
+//             .then(function(data) {
+//                 console.log(data.featured_image);
 
-            })
+//             })
 
-    } else {
-        return url;
-    }
-}
+//     } else {
+//         return url;
+//     }
+// }
 
 function showWeather(weatherData) {
 
@@ -267,13 +268,24 @@ function showRestaurant(restaurantData) {
 }
 
 function generateHotelPhoto(hotelPhoto) {
-    var hotelImage = document.createElement('div');
-    hotelImage.setAttribute("id", "scrollmenu");
+
+    var hotelImage = document.getElementsByClassName("hotelImageShow");
 
     for (let i = 0; i < hotelPhoto.length; i++) {
-        hotelImage.innerHTML += `<div class="hotelImageShow" style="background-image:url(${hotelPhoto[i].url})"></div>`
+        hotelImage.innerHTML += `<div class="hotelImageShow" style="background-image:url('${hotelPhoto[i].url}')"></div>`
     }
+
+
+
+
+
     console.log(hotelImage.innerHTML);
+
+    var node = document.getElementsByClassName("hotelImageShow").length;
+    console.log("this is node: " + node);
+
+    return hotelImage.innerHTML;
+    // console.log(hotelImage.innerHTML);
 
     // document.getElementById(element).appendChild(hotelImage);
 }
@@ -305,17 +317,24 @@ function showHotel(hotelData) {
 
 
 
+                    // for (let i = 0; i < hotelList.hotels[j].photos.length; i++) {
+
+
+
                     hotelContainer.innerHTML += `<div id="each-Hotel">` +
                         `<div class="hotel-Image-Container">` +
+                        // generateHotelPhoto(hotelList.hotels[j].photos) +
+                        `<div id="scrollmenu">` +
+                        // `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[0].url}')"></div>` +
                         generateHotelPhoto(hotelList.hotels[j].photos) +
 
-                        // `<div class="scrollmenu">` +
-
-                        // `<div class="hotel-Image">` +
-                        // `</div>` +
-                        // `</div>` +
+                        `</div>` +
                         `</div>` +
                         `</div>`;
+                    console.log(hotelList.hotels[j].photos[0].url);
+
+
+
 
                 }
             }

@@ -238,7 +238,7 @@ body {
     flex-wrap: wrap;
     background-color: white;
     min-height: 400px;
-    /* overflow: scroll; */
+    overflow: scroll;
     justify-items: center;
     justify-content: center;
     border: 1px solid #e7e7e7;
@@ -250,10 +250,12 @@ body {
     flex-wrap: wrap;
     background-color: white;
     min-height: 400px;
-    /* overflow: scroll; */
+    overflow: scroll;
     justify-items: center;
     justify-content: center;
     border: 1px solid #e7e7e7;
+    max-width: 2048px;
+    overflow-x: scroll;
 }
 
 #each-Hotel {
@@ -263,6 +265,8 @@ body {
     text-align: center;
     margin: 50px;
     background: rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow-x: scroll;
     /* background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(222, 36, 68, 1) 51%, rgba(253, 29, 29, 1) 74%, rgba(252, 176, 69, 1) 100%); */
 }
 
@@ -270,6 +274,16 @@ body {
     position: relative;
     margin: 0;
     overflow-x: scroll;
+}
+
+.hotel-Image-Container .hotelImageShow {
+    display: inline-block;
+    width: 300px;
+    height: 200px;
+    background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin: 0;
 }
 
 #scrollmenu {
@@ -280,6 +294,7 @@ body {
     display: inline-flex;
     height: auto;
     position: relative;
+    text-indent: -9999px;
 }
 
 #scrollmenu .hotel-Image {
