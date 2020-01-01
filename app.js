@@ -118,7 +118,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 
 function showPosition(position) {
-    var zomato_url = `https://developers.zomato.com/api/v2.1/geocode?lat=${position.coords.latitude}&lon=${position.coords.longitude}&count=20`;
+    var zomato_url = `https://developers.zomato.com/api/v2.1/geocode?lat=${-35.2809}&lon=${149.1300}&count=20`;
 
     var openweathermap_url;
 
@@ -267,17 +267,37 @@ function showRestaurant(restaurantData) {
     }
 }
 
+
+
 function generateHotelPhoto(hotelPhoto) {
 
+    var scrollmenu = document.getElementById("scrollmenu");
+    var hotelImage = document.getElementsByClassName("hotelImageShow");
 
+    for (let i = 0; i < hotelPhoto.length; i++) {
 
-    for (let i = 0; i < 10; i++) {
-        var hotelImage = document.getElementsByClassName("hotelImageShow");
+        hotelImage.innerHTML += `<div class="hotelImageShow" style="background-image:url('${hotelPhoto[i].url}')"></div>`;
+        // (function() {
+        //         var ii = i;
+        //         setTimeout(function() {
+        //             hotelImage.innerHTML = `<div class="hotelImageShow" style="background-image:url('${hotelPhoto[ii].url}')"></div>`
+        //         }, 1000);
+        //     }
 
-        hotelImage.innerHTML += `<div class="hotelImageShow" style="background-image:url('${hotelPhoto[i].url}')"></div>`
+        // )();
+
     }
+    scrollmenu.appendChild(hotelImage);
 
 
+    // for (const [key, value] of Object.entries(hotelPhoto)) {
+    //     console.log(key, value);
+    //     var hotelImage = document.getElementsByClassName("hotelImageShow");
+    //     hotelImage.innerHTML = `<div class="hotelImageShow" style="background-image:url('${value.url}')"></div>`
+    // }
+
+
+    return scrollmenu.innerHTML;
 
 
 
@@ -298,10 +318,38 @@ function generateHotelPhoto(hotelPhoto) {
     // }
 
 
-    return hotelImage.innerHTML;
     // console.log(hotelImage.innerHTML);
 
     // document.getElementById(element).appendChild(hotelImage);
+}
+
+function generateHotelData(hotelList) {
+    var hotelContainer = document.createElement('div');
+    hotelContainer.setAttribute("id", "hotelList");
+    hotelContainer.setAttribute("class", "hotel-info");
+    for (let j = 0; j < hotelList.hotels.length; j++) {
+        if (hotelList.hotels[j].stars != 0 && hotelList.hotels[j].pricefrom != 0 && hotelList.hotels[j].rating != 0 && hotelList.hotels[j].photos.length > 10) {
+            for (let k = j; k < hotelList.hotels[j].photos.length; k++) {
+
+
+                hotelContainer.innerHTML += `<div id="each-Hotel">` +
+                    `<div class="hotel-Image-Container">` +
+                    `<div id="scrollmenu">` +
+                    `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[k].url}')"></div>` +
+                    `</div>` +
+                    `</div>` +
+                    `</div>`;
+                document.getElementById("localHotel").appendChild(hotelContainer);
+
+            }
+        }
+
+    }
+
+
+    return hotelContainer.innerHTML;
+
+
 }
 
 function showHotel(hotelData) {
@@ -320,25 +368,23 @@ function showHotel(hotelData) {
         fetch(`https://engine.hotellook.com/api/v2/static/hotels.json?locationId=${hotelData[i].locationId}&token=${hotelKey}`).then(function(hotel) {
             return hotel.json();
         }).then(function(hotelList) {
-            console.log(hotelList);
-            console.log(hotelList.hotels);
-            console.log(hotelList.hotels.length);
+
+            // generateHotelData(hotelList);
+            // console.log(hotelList);
+            // console.log(hotelList.hotels);
+            // console.log(hotelList.hotels.length);
+
+
+
+
             for (let j = 0; j < hotelList.hotels.length; j++) {
                 if (hotelList.hotels[j].stars != 0 && hotelList.hotels[j].pricefrom != 0 && hotelList.hotels[j].rating != 0 && hotelList.hotels[j].photos.length > 10) {
-                    console.log(hotelList.hotels[j]);
-
-                    console.log(hotelList.hotels[j].photos);
-
-
-
-                    // for (let i = 0; i < hotelList.hotels[j].photos.length; i++) {
-
-
 
                     hotelContainer.innerHTML += `<div id="each-Hotel">` +
                         `<div class="hotel-Image-Container">` +
                         `<div id="scrollmenu">` +
                         // generateHotelPhoto(hotelList.hotels[j].photos) +
+
 
                         `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[0].url}')"></div>` +
                         `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[1].url}')"></div>` +
@@ -352,22 +398,92 @@ function showHotel(hotelData) {
                         `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[9].url}')"></div>` +
 
 
+
+
                         `</div>` +
                         `</div>` +
                         `</div>`;
-                    // console.log(hotelList.hotels[j].photos[0].url);
+                    // for (let k = 0; k < hotelList.hotels[j].photos.length; k++) {
 
+                    //     var hotelImage = document.createElement('div');
+                    //     hotelImage.setAttribute("id", "hotel-Image");
+                    //     hotelImage.setAttribute("class", "hotelImageShow");
+
+                    //     hotelImage.style.backgroundImage += `url('${hotelList.hotels[j].photos[k].url}')`;
+
+                    //     if (document.getElementById("hotel-Image") != null) {
+                    //         document.getElementById("scrollmenu").appendChild(hotelImage);
+                    //     } else {
+                    //         console.log(`failed: ` + document.getElementById("hotel-Image"));
+                    //     }
+
+                    //     console.log(hotelImage);
+
+                    //     hotelContainer.innerHTML += `<div id="each-Hotel">` +
+                    //         `<div class="hotel-Image-Container">` +
+                    //         `<div id="scrollmenu">` +
+                    //         // generateHotelPhoto(hotelList.hotels[j].photos) +
+
+                    //         `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[k].url}')"></div>` +
+
+
+
+                    //         `</div>` +
+                    //         `</div>` +
+                    //         `</div>`;
+                    //     console.log(`this is hotel id:  ${j} and has ${k} photos`);
+
+                    // }
+
+                    // hotelContainer.innerHTML += `<div id="each-Hotel">` +
+                    //     `<div class="hotel-Image-Container">` +
+                    //     `<div id="scrollmenu">` +
+                    //     generateHotelPhoto(hotelList.hotels[j].photos) +
+
+                    //     `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[k].url}')"></div>` +
+
+
+
+                    //     `</div>` +
+                    //     `</div>` +
+                    //     `</div>`;
+
+                    // for (let k = 0; k < hotelList.hotels[j].photos.length; k++) {
+                    //     hotelContainer.innerHTML += `<div id="each-Hotel">` +
+                    //         `<div class="hotel-Image-Container">` +
+                    //         `<div id="scrollmenu">` +
+                    //         // generateHotelPhoto(hotelList.hotels[j].photos) +
+
+                    //         `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[k].url}')"></div>` +
+
+
+
+                    //         `</div>` +
+                    //         `</div>` +
+                    //         `</div>`;
+                    // }
+
+
+                    // hotelContainer.innerHTML += `<div id="each-Hotel">` +
+                    //     `<div class="hotel-Image-Container">` +
+                    //     `<div id="scrollmenu">` +
+                    //     generateHotelPhoto(hotelList.hotels[j].photos) +
+
+
+
+
+                    //     `</div>` +
+                    //     `</div>` +
+                    //     `</div>`;
 
 
 
 
                 }
             }
+            document.getElementById("localHotel").appendChild(hotelContainer);
 
         })
-        document.getElementById("localHotel").appendChild(hotelContainer);
-        // var listLength = document.getElementById("scrollmenu").childElementCount;
-        // console.log(listLength);
 
     }
     // var list = document.getElementById("hotelList");
