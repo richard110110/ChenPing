@@ -262,7 +262,6 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     min-width: 340px;
     min-height: 100px;
-    text-align: center;
     margin: 50px;
     background: rgba(255, 255, 255, 0.5);
     position: relative;
@@ -306,14 +305,137 @@ body {
     padding: 5px 0;
 }
 
-.hotel-Image .hotelImageShow {
+.infoContainer {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    font: bold 16px sans-serif;
+    padding: 55px 50px;
+    margin-top: 0px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.hotelName {
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+}
+
+.hotelName i {
+    display: inline-flex;
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+
+/* .hotelName h3 {
+    font-family: "Jotia W00", sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    display: inline-flex;
+    color: black;
+} */
+
+.hotelPrice {
+    margin-left: 10px;
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+}
+
+.hotelPrice i {
+    display: inline-flex;
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+.hotelAddress {
+    margin-left: 10px;
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+}
+
+.hotelAddress i {
+    display: inline-flex;
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+.hotelCheckIn {
+    margin-left: 10px;
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+}
+
+.hotelCheckIn i {
+    display: inline-flex;
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+.hotelCheckOut i {
+    display: inline-flex;
+    font-size: 20px;
+    margin-right: 10px;
+    color: black;
+}
+
+.hotelCheckOut {
+    width: 15%;
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+}
+
+@media(max-width:935px) {
+    .hotelName,
+    .hotelAddress,
+    .hotelCheckIn,
+    .hotelCheckOut,
+    .hotelPrice {
+        display: block;
+        width: 100%;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+}
+
+
+/* .hotel-Image .hotelImageShow {
     display: inline-block;
     text-decoration: none;
     vertical-align: middle;
     height: auto;
     width: auto;
     padding: 5px 0;
-}
+} */
 
 
 /* #daily-weather:nth-child(1) {
