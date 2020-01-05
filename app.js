@@ -287,7 +287,21 @@ function generateEachHotelPhoto(hotelPhoto) {
 
 function generateEachFacility(hotelFacility) {
     var iteratorFacility = hotelFacility.values();
+    var facility = document.createElement('label');
 
+    for (let eachFacility of iteratorFacility) {
+        facility.innerHTML += `<label>${eachFacility}</label>`
+    }
+    return facility.innerHTML;
+}
+
+function generateStar(hotelStar) {
+    var star = document.createElement('div');
+    star.setAttribute("class", "hotelStar");
+    for (let i = 0; i < hotelStar; i++) {
+        star.innerHTML += `<i class="fas fa-star"></i>`;
+    }
+    return star.innerHTML;
 }
 
 function showHotel(hotelData) {
@@ -365,6 +379,15 @@ function showHotel(hotelData) {
                         `<i>CheckOut: </i>` +
                         `${hotelList.hotels[j].checkOut}` +
                         `</div>` +
+                        `<div class="facilityShow">` +
+                        `<label>Service:</label>` +
+                        generateEachFacility(hotelList.hotels[j].shortFacilities) +
+                        `</div>` +
+                        `<div class="hotelStar">` +
+                        `<label>Stars:</label>` +
+                        generateStar(hotelList.hotels[j].stars) +
+                        `</div>` +
+
                         `</div>` +
                         `</div>`;
                     // for (let k = 0; k < hotelList.hotels[j].photos.length; k++) {

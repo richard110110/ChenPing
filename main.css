@@ -310,7 +310,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     text-align: left;
-    font: bold 16px sans-serif;
+    /* font: bold 16px sans-serif; */
     padding: 55px 50px;
     margin-top: 0px;
     display: flex;
@@ -414,12 +414,80 @@ body {
     letter-spacing: 2px;
 }
 
+.facilityShow {
+    margin-top: 20px;
+}
+
+.facilityShow p {
+    /* display: inline-block; */
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+}
+
+.facilityShow label {
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+    margin-left: 20px;
+    font: bold;
+}
+
+.facilityShow label:nth-child(1) {
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+    margin-left: 0px;
+    font-weight: bold;
+}
+
+.hotelStar {
+    margin-top: 20px;
+    margin-left: 40px;
+    display: inline-block;
+}
+
+.hotelStar label {
+    display: inline-block;
+    vertical-align: top;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.932);
+    letter-spacing: 2px;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+.hotelStar i {
+    margin-top: 5px;
+}
+
 @media(max-width:935px) {
     .hotelName,
     .hotelAddress,
     .hotelCheckIn,
     .hotelCheckOut,
     .hotelPrice {
+        display: block;
+        width: 100%;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+}
+
+@media(max-width: 800px) {
+    .facilityShow {
+        text-align: center;
+    }
+    .facilityShow label {
         display: block;
         width: 100%;
         margin-bottom: 40px;
