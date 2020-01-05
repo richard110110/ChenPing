@@ -495,6 +495,66 @@ body {
     }
 }
 
+.selectPanel {
+    margin-left: 45%;
+}
+
+.local,
+.search {
+    background-color: #4CAF50;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s;
+    /* Safari */
+    transition-duration: 0.4s;
+    margin-left: 20px;
+}
+
+.local,
+.search:hover {
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+.search-Container {
+    margin: 0 auto;
+    width: 600px;
+    height: 100px;
+    margin-top: 50px;
+}
+
+.search-Container input[type=text] {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search-Container button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
 
 /* .hotel-Image .hotelImageShow {
     display: inline-block;

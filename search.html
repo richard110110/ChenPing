@@ -25,14 +25,20 @@
         </a>
     </div>
 
+    <div class="search-Container">
+        <input type="text" placeholder="Search place" name="search" id="searchPlace">
+        <!-- <button type="submit"><i class="fas fa-search"></i></button> -->
+    </div>
+
     <div class="map-wrapper" id="map"></div>
+
+
     <div class="nearby">
         <div class="weather-wrapper" id="localWeather">
 
         </div>
 
         <div class="restaurant-wrapper" id="restaurant"></div>
-        <!-- <div class="nearbyRestaurant" id="localRestaurant"></div> -->
 
 
         <div class="nearbyHotel" id="localHotel"></div>
@@ -41,8 +47,8 @@
 
 
 
-    <script src="app.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPUUiNkS8IVOhyqfGNb-3tt9XLspxaX3Y&libraries=places&callback=initMap"></script>
+    <script src="js/search.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPUUiNkS8IVOhyqfGNb-3tt9XLspxaX3Y&libraries=places&callback=initAutocomplete"></script>
 </body>
 
 </html>
