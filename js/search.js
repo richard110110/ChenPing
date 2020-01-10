@@ -2,6 +2,16 @@ const zomatoKey = "2a352dc74247e7f44da46d2405cd9f02";
 const hotelKey = "3e6ae58f1f4304d575cb1a739147986f";
 const weatherKey = "b40fcac67f4795e36979264e1d4bb3f4";
 
+const newsKey = "9ec9cdd0f4bf4ca1b3e00913ee10f819";
+
+var date = new Date();
+var googleDate = date.toISOString().split("T");
+
+let restaurantListener = 0;
+
+var entity_id;
+var geoLatitude;
+var geoLongitude;
 
 function initAutocomplete() {
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -47,6 +57,7 @@ function initAutocomplete() {
                 var longitude = results[0].geometry.location.lng();
 
                 console.log(latitude + " " + longitude);
+                listNearby(map, latitude, longitude);
 
                 listWeather(latitude, longitude);
                 listRestaurant(latitude, longitude);
@@ -63,6 +74,10 @@ function initAutocomplete() {
             if (!place.geometry) {
                 console.log("Returned place contains no geometry");
                 return;
+            }
+
+            if (restaurantListener == 1) {
+                console.log("nearby resyaurant ready");
             }
             console.log(place);
             var icon = {
@@ -122,61 +137,194 @@ function listRestaurant(latitude, longitude) {
         })
         .then(function(restaurantData) {
             console.log(restaurantData);
-            showRestaurant(restaurantData);
+            if (restaurantData.code == 400) {
+                console.log("null restaurants");
+                restaurantShow();
+            } else {
+                console.log(restaurantData.location.entity_id);
+                showCityRestaurant(restaurantData.location.entity_id, latitude, longitude);
+                entity_id = restaurantData.location.entity_id;
+                geoLatitude = latitude;
+                geoLongitude = longitude;
+
+                // showCity2Restaurant(restaurantData.location.entity_id, latitude, longitude);
+
+                // showRestaurant(restaurantData);
+
+            }
 
         })
 
+
+
 }
 
-function showRestaurant(restaurantData) {
 
+
+
+
+
+
+
+
+
+function showCityRestaurant(entity_id, latitude, longitude) {
+    var zomato_url = `https://developers.zomato.com/api/v2.1/search?entity_id=${entity_id}&start=0&count=20&lat=${latitude}&lon=${longitude}&radius=2000`;
+
+    var zomato2_url = `https://developers.zomato.com/api/v2.1/search?entity_id=${entity_id}&start=21&count=20&lat=${latitude}&lon=${longitude}&radius=2000`;
+
+    var zomato3_url = `https://developers.zomato.com/api/v2.1/search?entity_id=${entity_id}&start=41&count=20&lat=${latitude}&lon=${longitude}&radius=2000`;
+
+
+
+
+    fetch(zomato_url, {
+            method: "GET",
+            headers: {
+                "user-key": zomatoKey
+            }
+        }).then(function(restaurant) {
+            return restaurant.json();
+        })
+        .then(function(restaurantData) {
+            console.log(zomato_url);
+            console.log(restaurantData);
+            console.log(restaurantData.results_found);
+            showEachRestaurant(restaurantData);
+
+        })
+
+
+
+
+
+}
+
+function restaurantShow() {
+    var input = document.getElementById('searchPlace');
+    var searchBox = new google.maps.places.SearchBox(input);
+
+
+
+    searchBox.addListener('places_changed', function() {
+        var places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+            alert("nothing found, please reenter a valid place");
+            return;
+        }
+
+
+        // For each place, get the icon, name and location.
+        var bounds = new google.maps.LatLngBounds();
+        places.forEach(function(place) {
+            if (!place.geometry) {
+                console.log("Returned place contains no geometry");
+                return;
+            }
+
+            if (restaurantListener == 1) {
+                console.log("nearby resyaurant ready");
+            }
+            console.log(place);
+
+
+            // Create a marker for each place.
+
+
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
+            }
+        });
+    });
+
+}
+
+function showHighlights(hightlightData) {
+
+}
+
+
+
+function showEachRestaurant(restaurantData) {
     var restaurantContainer = document.createElement('div');
     restaurantContainer.setAttribute("id", "localRestaurant");
     restaurantContainer.setAttribute("class", "nearbyRestaurant");
 
-    for (let i = 0; i < restaurantData.nearby_restaurants.length; i++) {
-        fetch(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${restaurantData.nearby_restaurants[i].restaurant.id}`, {
-                method: "GET",
-                headers: {
-                    "user-key": zomatoKey
-                }
+    // var restaurantContainer = document.getElementById("localRestaurant");
+    document.getElementById("restaurant").innerHTML = "";
 
-            }).then(function(restaurant_Detail) {
-                return restaurant_Detail.json();
 
-            })
-            .then(function(data) {
-                // console.log(data);
-                // console.log(data.featured_image);
 
-                restaurantContainer.innerHTML += `<div id="each-Restaurant"><div class="featured-Image" style="background-image:url(${data.featured_image})">` +
-                    `<div class="rating" style="background-color:#${restaurantData.nearby_restaurants[i].restaurant.user_rating.rating_color}">` +
-                    `<div class="rates">${restaurantData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating}</div></div>` +
-                    `</div>` +
-                    `<div class="restaurant-Name-Container">` +
-                    `<i class="fas fa-utensils"></i>` +
-                    `<div class="restaurant-Name"><a href="${restaurantData.nearby_restaurants[i].restaurant.url}">${restaurantData.nearby_restaurants[i].restaurant.name}</a></div>` +
-                    `</div>` + `<div class="restaurant-Address-Container">` +
-                    `<i class="fas fa-map-marker-alt"></i>` +
-                    `<div class="restaurant-Address">${restaurantData.nearby_restaurants[i].restaurant.location.address}</div>` +
-                    `</div>` +
-                    `<div class="restaurant-Cuisine-Container">` +
-                    `<div class="restaurant-Cuisine">Cuisine: ${restaurantData.nearby_restaurants[i].restaurant.cuisines}</div>` +
-                    `</div>` + `<div class="restaurant-Cost-Container">` +
-                    `<i>${restaurantData.nearby_restaurants[i].restaurant.currency}</i>` +
-                    `<div class="restaurant-Cost">${restaurantData.nearby_restaurants[i].restaurant.average_cost_for_two}</div>` +
-                    `</div>` +
-                    `</div>`;
+    for (let i = 0; i < restaurantData.restaurants.length; i++) {
+        // console.log(restaurantData.restaurants[i]);
+        // console.log(restaurantData.restaurants[i].restaurant.cuisines);
 
-            })
+        restaurantContainer.innerHTML +=
+            `<div id="each-Restaurant"><div class="featured-Image" style="background-image:url(${restaurantData.restaurants[i].restaurant.featured_image})">` +
+            `<div class="rating" style="background-color:#${restaurantData.restaurants[i].restaurant.user_rating.rating_color}">` +
+            `<div class="rates">${restaurantData.restaurants[i].restaurant.user_rating.aggregate_rating}</div>` +
+            `</div>` +
+            `</div>` +
+            `<div class="restaurant-Name-Container">` +
+            `<i class="fas fa-utensils"></i>` +
+            `<div class="restaurant-Name"><a href="${restaurantData.restaurants[i].restaurant.url}">${restaurantData.restaurants[i].restaurant.name}</a></div>` +
+            `</div>` +
+            `<div class="restaurant-Address-Container">` +
+            `<i class="fas fa-map-marker-alt"></i>` +
+            `<div class="restaurant-Address">` +
+            `${restaurantData.restaurants[i].restaurant.location.address}` +
+            `</div>` +
+            `</div>` +
+            `<div class="restaurant-Cuisine-Container">` +
+            `<div class="restaurant-Cuisine">Cuisine: ${restaurantData.restaurants[i].restaurant.cuisines}</div>` +
+            `</div>` + `<div class="restaurant-Cost-Container">` +
+            `<i>${restaurantData.restaurants[i].restaurant.currency}</i>` +
+            `<div class="restaurant-Cost">${restaurantData.restaurants[i].restaurant.average_cost_for_two}</div>` +
+            `</div>` +
+            `<div class="openingHours-Container">` +
+            `<i class="fas fa-clock"></i>` +
+            `<div class="restaurant-OpeningHours">` +
+            `${restaurantData.restaurants[i].restaurant.timings}` +
+            `</div>` +
+            `</div>` +
+            `<ul class="hightlightsTag-Container">` +
+            generateHighlights(restaurantData.restaurants[i].restaurant.highlights) +
+            `</ul>` +
+            `<div class="restaurant-Image-Container">` +
+            `<div class="scrollmenu">` +
+            generateRestaurantPhoto(restaurantData.restaurants[i].restaurant.photos) +
+            `</div>` +
+            `</div>` +
+            `</div>`;
 
         document
             .getElementById("restaurant")
             .appendChild(restaurantContainer);
 
+
     }
 
+
 }
+
+function sortRestaurant() {
+    var list, i, switching, each, shouldSwitch;
+    list = document.getElementById("localRestaurant");
+
+    switching = true;
+    while (switching) {
+        switching = false;
+        each = document.getElementById("each-Restaurant");
+        console.log(each);
+
+    }
+}
+
+
 
 function listWeather(latitude, longitude) {
     var openweathermap_url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${weatherKey}`;
@@ -191,6 +339,7 @@ function listWeather(latitude, longitude) {
 }
 
 function showWeather(weatherData) {
+    document.getElementById("localWeather").innerHTML = "";
     var i;
     for (i = 0; i < weatherData.list.length; i++) {
         if (weatherData.list[i].dt_txt.includes("15:00")) {
@@ -224,7 +373,34 @@ function listHotel(latitude, longitude) {
     })
 }
 
+function generateHighlights(highlights) {
+    var iteratorHighlights = highlights.values();
+    var tagContainer = document.createElement('li');
+    tagContainer.setAttribute("class", "highlightTag");
 
+    for (let each of iteratorHighlights) {
+        tagContainer.innerHTML += `<li><a href="#" class="highlightTag">${each}</a></li>`;
+    }
+
+    return tagContainer.innerHTML;
+
+
+}
+
+function generateRestaurantPhoto(restaurantPhoto) {
+    var iteratorPhoto = restaurantPhoto.values();
+    // console.log(iteratorPhoto);
+    // console.log(restaurantPhoto.length);
+    var imageContainer = document.createElement('div');
+    imageContainer.setAttribute("class", "restaurantImageShow");
+    for (let eachPhoto of iteratorPhoto) {
+        // console.log(eachPhoto.photo.thumb_url);
+        imageContainer.innerHTML += `<div class="restaurantImageShow" style="background-image:url('${eachPhoto.photo.thumb_url}')"></div>`;
+
+    }
+    return imageContainer.innerHTML;
+
+}
 
 
 function generateEachHotelPhoto(hotelPhoto) {
@@ -240,12 +416,13 @@ function generateEachHotelPhoto(hotelPhoto) {
 
 function generateEachFacility(hotelFacility) {
     var iteratorFacility = hotelFacility.values();
-    var facility = document.createElement('label');
+    var tagContainer = document.createElement('li');
+    tagContainer.setAttribute("class", "highlightTag");
 
     for (let eachFacility of iteratorFacility) {
-        facility.innerHTML += `<label>${eachFacility}</label>`
+        tagContainer.innerHTML += `<li><a href="#" class="highlightTag">${eachFacility}</a></li>`;;
     }
-    return facility.innerHTML;
+    return tagContainer.innerHTML;
 }
 
 function generateStar(hotelStar) {
@@ -259,9 +436,11 @@ function generateStar(hotelStar) {
 
 function showHotel(hotelData) {
     console.log(hotelData.length);
+    document.getElementById("localHotel").innerHTML = "";
     var hotelContainer = document.createElement('div');
     hotelContainer.setAttribute("id", "hotelList");
     hotelContainer.setAttribute("class", "hotel-info");
+
     // console.log(hotelData.results.hotels.length);
 
     for (let i = hotelData.length - 1; i < hotelData.length; i++) {
@@ -283,24 +462,24 @@ function showHotel(hotelData) {
 
             for (let j = 0; j < hotelList.hotels.length; j++) {
                 if (hotelList.hotels[j].stars != 0 && hotelList.hotels[j].pricefrom != 0 && hotelList.hotels[j].rating != 0 && hotelList.hotels[j].photos.length > 1) {
-                    console.log(hotelList.hotels[j]);
-                    console.log(hotelList.hotels[j].photos);
+                    // console.log(hotelList.hotels[j]);
+                    // console.log(hotelList.hotels[j].photos);
                     var iteratorPhoto = hotelList.hotels[j].photos.values();
                     for (let eachPhoto of iteratorPhoto) {
-                        console.log(eachPhoto.url);
+                        // console.log(eachPhoto.url);
                     }
 
-                    console.log(hotelList.hotels[j].shortFacilities.values());
+                    // console.log(hotelList.hotels[j].shortFacilities.values());
 
                     var iteratorFacility = hotelList.hotels[j].shortFacilities.values();
                     for (let eachFacility of iteratorFacility) {
-                        console.log(eachFacility);
+                        // console.log(eachFacility);
                     }
 
 
                     hotelContainer.innerHTML += `<div id="each-Hotel">` +
                         `<div class="hotel-Image-Container">` +
-                        `<div id="scrollmenu">` +
+                        `<div class="scrollmenu">` +
                         // generateHotelPhoto(hotelList.hotels[j].photos) +
                         generateEachHotelPhoto(hotelList.hotels[j].photos) +
 
@@ -311,7 +490,7 @@ function showHotel(hotelData) {
 
                         `</div>` +
                         `</div>` +
-                        `<div class="infoContainer">` +
+                        `<ul class="infoContainer">` +
                         `<div class="hotelName">` +
                         `<i class="fas fa-hotel"></i>` +
                         `${hotelList.hotels[j].name.en}` +
@@ -331,10 +510,9 @@ function showHotel(hotelData) {
                         `<i>CheckOut: </i>` +
                         `${hotelList.hotels[j].checkOut}` +
                         `</div>` +
-                        `<div class="facilityShow">` +
-                        `<label>Service:</label>` +
+                        `<ul class="hightlightsTag-Container">` +
                         generateEachFacility(hotelList.hotels[j].shortFacilities) +
-                        `</div>` +
+                        `</ul>` +
                         `<div class="hotelStar">` +
                         `<label>Stars:</label>` +
                         generateStar(hotelList.hotels[j].stars) +
@@ -342,78 +520,6 @@ function showHotel(hotelData) {
 
                         `</div>` +
                         `</div>`;
-                    // for (let k = 0; k < hotelList.hotels[j].photos.length; k++) {
-
-                    //     var hotelImage = document.createElement('div');
-                    //     hotelImage.setAttribute("id", "hotel-Image");
-                    //     hotelImage.setAttribute("class", "hotelImageShow");
-
-                    //     hotelImage.style.backgroundImage += `url('${hotelList.hotels[j].photos[k].url}')`;
-
-                    //     if (document.getElementById("hotel-Image") != null) {
-                    //         document.getElementById("scrollmenu").appendChild(hotelImage);
-                    //     } else {
-                    //         console.log(`failed: ` + document.getElementById("hotel-Image"));
-                    //     }
-
-                    //     console.log(hotelImage);
-
-                    //     hotelContainer.innerHTML += `<div id="each-Hotel">` +
-                    //         `<div class="hotel-Image-Container">` +
-                    //         `<div id="scrollmenu">` +
-                    //         // generateHotelPhoto(hotelList.hotels[j].photos) +
-
-                    //         `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[k].url}')"></div>` +
-
-
-
-                    //         `</div>` +
-                    //         `</div>` +
-                    //         `</div>`;
-                    //     console.log(`this is hotel id:  ${j} and has ${k} photos`);
-
-                    // }
-
-                    // hotelContainer.innerHTML += `<div id="each-Hotel">` +
-                    //     `<div class="hotel-Image-Container">` +
-                    //     `<div id="scrollmenu">` +
-                    //     generateHotelPhoto(hotelList.hotels[j].photos) +
-
-                    //     `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[k].url}')"></div>` +
-
-
-
-                    //     `</div>` +
-                    //     `</div>` +
-                    //     `</div>`;
-
-                    // for (let k = 0; k < hotelList.hotels[j].photos.length; k++) {
-                    //     hotelContainer.innerHTML += `<div id="each-Hotel">` +
-                    //         `<div class="hotel-Image-Container">` +
-                    //         `<div id="scrollmenu">` +
-                    //         // generateHotelPhoto(hotelList.hotels[j].photos) +
-
-                    //         `<div class="hotelImageShow" style="background-image:url('${hotelList.hotels[j].photos[k].url}')"></div>` +
-
-
-
-                    //         `</div>` +
-                    //         `</div>` +
-                    //         `</div>`;
-                    // }
-
-
-                    // hotelContainer.innerHTML += `<div id="each-Hotel">` +
-                    //     `<div class="hotel-Image-Container">` +
-                    //     `<div id="scrollmenu">` +
-                    //     generateHotelPhoto(hotelList.hotels[j].photos) +
-
-
-
-
-                    //     `</div>` +
-                    //     `</div>` +
-                    //     `</div>`;
 
 
 
@@ -426,4 +532,33 @@ function showHotel(hotelData) {
 
     }
 
+}
+
+function listNews(city) {
+    const newsAPI = `https://newsapi.org/v2/everything?q=bitcoin&from=${googleDate}&sortBy=publishedAt&apiKey=${newsKey}`;
+    fetch(newsAPI).then(function(news) {
+        return news.json();
+    }).then(function(newsData) {
+        console.log(newsData);
+    })
+}
+
+function listNearby(map, latitude, longitude) {
+    var location = new google.maps.LatLng(latitude, longitude);
+    var request = {
+        location: location,
+        radius: '1000',
+        type: ['restaurant']
+    };
+
+    service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, callback);
+
+
+}
+
+function callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        console.log(results);
+    }
 }
