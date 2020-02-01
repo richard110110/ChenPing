@@ -118,11 +118,13 @@ function convertKelvinToCelsius(kelvin) {
 
 
 
+var restaurantDataAll = [];
 
 
 
 
 function listRestaurant(latitude, longitude) {
+    restaurantDataAll = [];
     var zomato_url = `https://developers.zomato.com/api/v2.1/geocode?lat=${latitude}&lon=${longitude}&count=20`;
 
     fetch(zomato_url, {
@@ -187,18 +189,21 @@ function showCityRestaurant(entity_id, latitude, longitude) {
             return restaurant.json();
         })
         .then(function(restaurantData) {
+            for (let i = 0; i < restaurantData.restaurants.length; i++) {
+                restaurantDataAll.push(restaurantData.restaurants[i]);
+            }
             console.log(zomato_url);
-            console.log(restaurantData);
+            console.log(restaurantData.restaurants);
             console.log(restaurantData.results_found);
-            showEachRestaurant(restaurantData);
+            console.log(restaurantDataAll);
+            showEachRestaurant(restaurantDataAll);
 
         })
+        // console.log(restaurantDataAll);
 
-
-
-
-
+    return restaurantDataAll;
 }
+// console.log(restaurantDataAll);
 
 function restaurantShow() {
     var input = document.getElementById('searchPlace');
@@ -250,53 +255,47 @@ function showHighlights(hightlightData) {
 
 
 function showEachRestaurant(restaurantData) {
-    var restaurantContainer = document.createElement('div');
-    restaurantContainer.setAttribute("id", "localRestaurant");
-    restaurantContainer.setAttribute("class", "nearbyRestaurant");
+    var restaurantContainer = document.getElementById("localRestaurant");
 
-    // var restaurantContainer = document.getElementById("localRestaurant");
-    document.getElementById("restaurant").innerHTML = "";
+    document.getElementById("localRestaurant").innerHTML = "";
 
 
-
-    for (let i = 0; i < restaurantData.restaurants.length; i++) {
-        // console.log(restaurantData.restaurants[i]);
-        // console.log(restaurantData.restaurants[i].restaurant.cuisines);
+    restaurantData.map(eachRestaurant => {
 
         restaurantContainer.innerHTML +=
-            `<div id="each-Restaurant"><div class="featured-Image" style="background-image:url(${restaurantData.restaurants[i].restaurant.featured_image})">` +
-            `<div class="rating" style="background-color:#${restaurantData.restaurants[i].restaurant.user_rating.rating_color}">` +
-            `<div class="rates">${restaurantData.restaurants[i].restaurant.user_rating.aggregate_rating}</div>` +
+            `<div id="each-Restaurant"><div class="featured-Image" style="background-image:url(${eachRestaurant.restaurant.featured_image})">` +
+            `<div class="rating" style="background-color:#${eachRestaurant.restaurant.user_rating.rating_color}">` +
+            `<div class="rates">${eachRestaurant.restaurant.user_rating.aggregate_rating}</div>` +
             `</div>` +
             `</div>` +
             `<div class="restaurant-Name-Container">` +
             `<i class="fas fa-utensils"></i>` +
-            `<div class="restaurant-Name"><a href="${restaurantData.restaurants[i].restaurant.url}">${restaurantData.restaurants[i].restaurant.name}</a></div>` +
+            `<div class="restaurant-Name"><a href="${eachRestaurant.restaurant.url}">${eachRestaurant.restaurant.name}</a></div>` +
             `</div>` +
             `<div class="restaurant-Address-Container">` +
             `<i class="fas fa-map-marker-alt"></i>` +
             `<div class="restaurant-Address">` +
-            `${restaurantData.restaurants[i].restaurant.location.address}` +
+            `${eachRestaurant.restaurant.location.address}` +
             `</div>` +
             `</div>` +
             `<div class="restaurant-Cuisine-Container">` +
-            `<div class="restaurant-Cuisine">Cuisine: ${restaurantData.restaurants[i].restaurant.cuisines}</div>` +
+            `<div class="restaurant-Cuisine">Cuisine: ${eachRestaurant.restaurant.cuisines}</div>` +
             `</div>` + `<div class="restaurant-Cost-Container">` +
-            `<i>${restaurantData.restaurants[i].restaurant.currency}</i>` +
-            `<div class="restaurant-Cost">${restaurantData.restaurants[i].restaurant.average_cost_for_two}</div>` +
+            `<i>${eachRestaurant.restaurant.currency}</i>` +
+            `<div class="restaurant-Cost">${eachRestaurant.restaurant.average_cost_for_two}</div>` +
             `</div>` +
             `<div class="openingHours-Container">` +
             `<i class="fas fa-clock"></i>` +
             `<div class="restaurant-OpeningHours">` +
-            `${restaurantData.restaurants[i].restaurant.timings}` +
+            `${eachRestaurant.restaurant.timings}` +
             `</div>` +
             `</div>` +
             `<ul class="hightlightsTag-Container">` +
-            generateHighlights(restaurantData.restaurants[i].restaurant.highlights) +
+            generateHighlights(eachRestaurant.restaurant.highlights) +
             `</ul>` +
             `<div class="restaurant-Image-Container">` +
             `<div class="scrollmenu">` +
-            generateRestaurantPhoto(restaurantData.restaurants[i].restaurant.photos) +
+            generateRestaurantPhoto(eachRestaurant.restaurant.photos) +
             `</div>` +
             `</div>` +
             `</div>`;
@@ -306,23 +305,170 @@ function showEachRestaurant(restaurantData) {
             .appendChild(restaurantContainer);
 
 
-    }
+    })
 
+    //document.getElementById("ByIdBtn").style.background = "#3DC9A0";
+
+    // for (let i = 0; i < restaurantData.length; i++) {
+    //     // console.log(restaurantData.restaurants[i]);
+    //     // console.log(restaurantData.restaurants[i].restaurant.cuisines);
+
+
+
+    // }
+}
+
+function showAllData() {
+    var restaurantContainer = document.getElementById("localRestaurant");
+
+    document.getElementById("localRestaurant").innerHTML = "";
+
+
+    restaurantDataAll.map(eachRestaurant => {
+
+        restaurantContainer.innerHTML +=
+            `<div id="each-Restaurant"><div class="featured-Image" style="background-image:url(${eachRestaurant.restaurant.featured_image})">` +
+            `<div class="rating" style="background-color:#${eachRestaurant.restaurant.user_rating.rating_color}">` +
+            `<div class="rates">${eachRestaurant.restaurant.user_rating.aggregate_rating}</div>` +
+            `</div>` +
+            `</div>` +
+            `<div class="restaurant-Name-Container">` +
+            `<i class="fas fa-utensils"></i>` +
+            `<div class="restaurant-Name"><a href="${eachRestaurant.restaurant.url}">${eachRestaurant.restaurant.name}</a></div>` +
+            `</div>` +
+            `<div class="restaurant-Address-Container">` +
+            `<i class="fas fa-map-marker-alt"></i>` +
+            `<div class="restaurant-Address">` +
+            `${eachRestaurant.restaurant.location.address}` +
+            `</div>` +
+            `</div>` +
+            `<div class="restaurant-Cuisine-Container">` +
+            `<div class="restaurant-Cuisine">Cuisine: ${eachRestaurant.restaurant.cuisines}</div>` +
+            `</div>` + `<div class="restaurant-Cost-Container">` +
+            `<i>${eachRestaurant.restaurant.currency}</i>` +
+            `<div class="restaurant-Cost">${eachRestaurant.restaurant.average_cost_for_two}</div>` +
+            `</div>` +
+            `<div class="openingHours-Container">` +
+            `<i class="fas fa-clock"></i>` +
+            `<div class="restaurant-OpeningHours">` +
+            `${eachRestaurant.restaurant.timings}` +
+            `</div>` +
+            `</div>` +
+            `<ul class="hightlightsTag-Container">` +
+            generateHighlights(eachRestaurant.restaurant.highlights) +
+            `</ul>` +
+            `<div class="restaurant-Image-Container">` +
+            `<div class="scrollmenu">` +
+            generateRestaurantPhoto(eachRestaurant.restaurant.photos) +
+            `</div>` +
+            `</div>` +
+            `</div>`;
+
+        document
+            .getElementById("restaurant")
+            .appendChild(restaurantContainer);
+
+
+    })
+
+    // document.getElementById("ByIdBtn").style.background = "#3DC9A0";
 
 }
 
-function sortRestaurant() {
-    var list, i, switching, each, shouldSwitch;
-    list = document.getElementById("localRestaurant");
 
-    switching = true;
-    while (switching) {
-        switching = false;
-        each = document.getElementById("each-Restaurant");
-        console.log(each);
 
+
+//根据每个数组里的不同选项进行排序的方程（可应用于任何object类型的数组）
+function sortByItem(itemName) {
+    return function(object1, object2) {
+        var value1 = object1["restaurant"][itemName];
+        console.log(value1);
+        var value2 = object2["restaurant"][itemName];
+        console.log(value2);
+        if (value1 > value2) {
+            return 1;
+        } else if (value1 == value2) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }
+
+function sortByRating(itemName) {
+    return function(object1, object2) {
+        var value1 = object1["restaurant"]["user_rating"][itemName];
+        console.log(value1);
+        var value2 = object2["restaurant"]["user_rating"][itemName];
+        console.log(value2);
+        if (value1 > value2) {
+            return 1;
+        } else if (value1 == value2) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+}
+
+
+function sortRestaurantByItem(item) {
+    console.log(item);
+    document.getElementById("localRestaurant").innerHTML = "";
+
+    restaurantDataAll.sort(sortByItem(item)); //js 自带排序方程
+    console.log(restaurantDataAll);
+    showEachRestaurant(restaurantDataAll);
+}
+
+function sortRestaurantByRating(item) {
+    console.log(item);
+    document.getElementById("localRestaurant").innerHTML = "";
+
+    restaurantDataAll.sort(sortByRating(item)); //js 自带排序方程
+    console.log(restaurantDataAll);
+    showEachRestaurant(restaurantDataAll);
+}
+
+
+document.getElementById('ByNameBtn').addEventListener('click', function() {
+    console.log("clicked");
+
+    sortRestaurantByItem('name');
+    document.getElementById("ByPriceBtn").style.background = "#f85a06";
+    document.getElementById("ByRateBtn").style.background = "#f85a06";
+    document.getElementById("ByNameBtn").style.background = "#3DC9A0";
+
+
+
+
+
+})
+
+document.getElementById('ByPriceBtn').addEventListener('click', function() {
+    console.log("clicked");
+
+    sortRestaurantByItem('average_cost_for_two');
+    document.getElementById("ByPriceBtn").style.background = "#3DC9A0";
+    document.getElementById("ByRateBtn").style.background = "#f85a06";
+    document.getElementById("ByNameBtn").style.background = "#f85a06";
+
+
+
+})
+
+
+document.getElementById('ByRateBtn').addEventListener('click', function() {
+    console.log("clicked");
+
+    sortRestaurantByRating("aggregate_rating");
+    document.getElementById("ByPriceBtn").style.background = "#f85a06";
+    document.getElementById("ByRateBtn").style.background = "#3DC9A0";
+    document.getElementById("ByNameBtn").style.background = "#f85a06";
+
+
+
+})
 
 
 
@@ -362,16 +508,6 @@ function showWeather(weatherData) {
 
 }
 
-function listHotel(latitude, longitude) {
-    var hotel_url = `https://engine.hotellook.com/api/v2/lookup.json?query=${latitude},${longitude}&lang=en&lookFor=hotel&limit=10&token=${hotelKey}`;
-    fetch(hotel_url).then(function(weather) {
-        return weather.json();
-
-    }).then(function(hotelData) {
-        console.log(hotelData);
-        showHotel(hotelData.results.hotels);
-    })
-}
 
 function generateHighlights(highlights) {
     var iteratorHighlights = highlights.values();
@@ -434,6 +570,105 @@ function generateStar(hotelStar) {
     return star.innerHTML;
 }
 
+var hotelDataAll = [];
+
+function listHotel(latitude, longitude) {
+    var hotel_url = `https://engine.hotellook.com/api/v2/lookup.json?query=${latitude},${longitude}&lang=en&lookFor=hotel&limit=10&token=${hotelKey}`;
+    fetch(hotel_url).then(function(weather) {
+        return weather.json();
+
+    }).then(function(hotelData) {
+        console.log(hotelData);
+        console.log(hotelData.results.hotels);
+        for (let i = hotelData.results.hotels.length - 1; i < hotelData.results.hotels.length; i++) {
+            fetch(`https://engine.hotellook.com/api/v2/static/hotels.json?locationId=${hotelData.results.hotels[i].locationId}&token=${hotelKey}`).then(function(hotel) {
+                return hotel.json();
+            }).then(function(hotelList) {
+                for (let j = 0; j < hotelList.hotels.length; j++) {
+                    if (hotelList.hotels[j].stars != 0 && hotelList.hotels[j].pricefrom != 0 && hotelList.hotels[j].rating != 0 && hotelList.hotels[j].photos.length > 1) {
+                        //  console.log(hotelList.hotels[j]);
+                        hotelDataAll.push(hotelList.hotels[j]);
+                    }
+                }
+                console.log(hotelDataAll);
+                showHotel(hotelDataAll);
+
+            })
+        }
+
+
+        console.log(hotelDataAll.length);
+
+
+    })
+    return hotelDataAll;
+}
+
+function sortHotelByItem(itemName) {
+    return function(object1, object2) {
+        var value1 = object1[itemName];
+        console.log(value1);
+        var value2 = object2[itemName];
+        console.log(value2);
+        if (value1 > value2) {
+            return 1;
+        } else if (value1 == value2) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+}
+
+function sortHotelByDifferentItem(item) {
+    console.log(item);
+    document.getElementById("localHotel").innerHTML = "";
+
+    hotelDataAll.sort(sortHotelByItem(item)); //js 自带排序方程
+    console.log(hotelDataAll);
+    showHotel(hotelDataAll);
+}
+
+document.getElementById('ByHotelNameBtn').addEventListener('click', function() {
+    console.log("clicked");
+
+    sortHotelByDifferentItem('distance');
+    document.getElementById("ByPriceBtn").style.background = "#f85a06";
+    document.getElementById("ByHotelRateBtn").style.background = "#f85a06";
+    document.getElementById("ByHotelNameBtn").style.background = "#3DC9A0";
+
+
+
+
+
+})
+
+document.getElementById('ByHotelPriceBtn').addEventListener('click', function() {
+    console.log("clicked");
+
+    sortHotelByDifferentItem('pricefrom');
+    document.getElementById("ByHotelPriceBtn").style.background = "#3DC9A0";
+    document.getElementById("ByHotelRateBtn").style.background = "#f85a06";
+    document.getElementById("ByHotelNameBtn").style.background = "#f85a06";
+
+
+
+})
+
+
+document.getElementById('ByHotelRateBtn').addEventListener('click', function() {
+    console.log("clicked");
+
+    sortHotelByDifferentItem("stars");
+    document.getElementById("ByHotelPriceBtn").style.background = "#f85a06";
+    document.getElementById("ByHotelRateBtn").style.background = "#3DC9A0";
+    document.getElementById("ByHotelNameBtn").style.background = "#f85a06";
+
+
+
+})
+
+
 function showHotel(hotelData) {
     console.log(hotelData.length);
     document.getElementById("localHotel").innerHTML = "";
@@ -441,98 +676,71 @@ function showHotel(hotelData) {
     hotelContainer.setAttribute("id", "hotelList");
     hotelContainer.setAttribute("class", "hotel-info");
 
-    // console.log(hotelData.results.hotels.length);
 
-    for (let i = hotelData.length - 1; i < hotelData.length; i++) {
-        console.log("test it");
-        // console.log(hotelData.results.hotel[i].locationId);
+    for (let j = 0; j < hotelData.length; j++) {
 
-
-        fetch(`https://engine.hotellook.com/api/v2/static/hotels.json?locationId=${hotelData[i].locationId}&token=${hotelKey}`).then(function(hotel) {
-            return hotel.json();
-        }).then(function(hotelList) {
-
-            // generateHotelData(hotelList);
-            console.log(hotelList);
-            // console.log(hotelList.hotels);
-            // console.log(hotelList.hotels.length);
+        var iteratorPhoto = hotelData[j].photos.values();
+        for (let eachPhoto of iteratorPhoto) {}
 
 
+        var iteratorFacility = hotelData[j].shortFacilities.values();
+        for (let eachFacility of iteratorFacility) {}
 
 
-            for (let j = 0; j < hotelList.hotels.length; j++) {
-                if (hotelList.hotels[j].stars != 0 && hotelList.hotels[j].pricefrom != 0 && hotelList.hotels[j].rating != 0 && hotelList.hotels[j].photos.length > 1) {
-                    // console.log(hotelList.hotels[j]);
-                    // console.log(hotelList.hotels[j].photos);
-                    var iteratorPhoto = hotelList.hotels[j].photos.values();
-                    for (let eachPhoto of iteratorPhoto) {
-                        // console.log(eachPhoto.url);
-                    }
-
-                    // console.log(hotelList.hotels[j].shortFacilities.values());
-
-                    var iteratorFacility = hotelList.hotels[j].shortFacilities.values();
-                    for (let eachFacility of iteratorFacility) {
-                        // console.log(eachFacility);
-                    }
-
-
-                    hotelContainer.innerHTML += `<div id="each-Hotel">` +
-                        `<div class="hotel-Image-Container">` +
-                        `<div class="scrollmenu">` +
-                        // generateHotelPhoto(hotelList.hotels[j].photos) +
-                        generateEachHotelPhoto(hotelList.hotels[j].photos) +
+        hotelContainer.innerHTML += `<div id="each-Hotel">` +
+            `<div class="hotel-Image-Container">` +
+            `<div class="scrollmenu">` +
+            generateEachHotelPhoto(hotelData[j].photos) +
 
 
 
 
 
 
-                        `</div>` +
-                        `</div>` +
-                        `<ul class="infoContainer">` +
-                        `<div class="hotelName">` +
-                        `<i class="fas fa-hotel"></i>` +
-                        `${hotelList.hotels[j].name.en}` +
-                        `</div>` +
-                        `<div class="hotelAddress">` +
-                        `<i class="fas fa-map-marker-alt"></i>` +
-                        `${hotelList.hotels[j].address.en}</div>` +
-                        `<div class="hotelPrice">` +
-                        `<i class="fas fa-dollar-sign"></i>` +
-                        `${hotelList.hotels[j].pricefrom}` +
-                        `</div>` +
-                        `<div class="hotelCheckIn">` +
-                        `<i>CheckIn: </i>` +
-                        `${hotelList.hotels[j].checkIn}` +
-                        `</div>` +
-                        `<div class="hotelCheckOut">` +
-                        `<i>CheckOut: </i>` +
-                        `${hotelList.hotels[j].checkOut}` +
-                        `</div>` +
-                        `<ul class="hightlightsTag-Container">` +
-                        generateEachFacility(hotelList.hotels[j].shortFacilities) +
-                        `</ul>` +
-                        `<div class="hotelStar">` +
-                        `<label>Stars:</label>` +
-                        generateStar(hotelList.hotels[j].stars) +
-                        `</div>` +
+            `</div>` +
+            `</div>` +
+            `<ul class="infoContainer">` +
+            `<div class="hotelName">` +
+            `<i class="fas fa-hotel"></i>` +
+            `${hotelData[j].name.en}` +
+            `</div>` +
+            `<div class="hotelAddress">` +
+            `<i class="fas fa-map-marker-alt"></i>` +
+            `${hotelData[j].address.en}</div>` +
+            `<div class="hotelPrice">` +
+            `<i class="fas fa-dollar-sign"></i>` +
+            `${hotelData[j].pricefrom}` +
+            `</div>` +
+            `<div class="hotelCheckIn">` +
+            `<i>CheckIn: </i>` +
+            `${hotelData[j].checkIn}` +
+            `</div>` +
+            `<div class="hotelCheckOut">` +
+            `<i>CheckOut: </i>` +
+            `${hotelData[j].checkOut}` +
+            `</div>` +
+            `<ul class="hightlightsTag-Container">` +
+            generateEachFacility(hotelData[j].shortFacilities) +
+            `</ul>` +
+            `<div class="hotelStar">` +
+            `<label>Stars:</label>` +
+            generateStar(hotelData[j].stars) +
+            `</div>` +
 
-                        `</div>` +
-                        `</div>`;
-
-
+            `</div>` +
+            `</div>`;
 
 
-                }
-            }
-            document.getElementById("localHotel").appendChild(hotelContainer);
 
-        })
 
     }
+    document.getElementById("localHotel").appendChild(hotelContainer);
+
+
 
 }
+
+
 
 function listNews(city) {
     const newsAPI = `https://newsapi.org/v2/everything?q=bitcoin&from=${googleDate}&sortBy=publishedAt&apiKey=${newsKey}`;
