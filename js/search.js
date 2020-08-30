@@ -293,11 +293,6 @@ function showEachRestaurant(restaurantData) {
             `<ul class="hightlightsTag-Container">` +
             generateHighlights(eachRestaurant.restaurant.highlights) +
             `</ul>` +
-            `<div class="restaurant-Image-Container">` +
-            `<div class="scrollmenu">` +
-            generateRestaurantPhoto(eachRestaurant.restaurant.photos) +
-            `</div>` +
-            `</div>` +
             `</div>`;
 
         document
