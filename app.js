@@ -118,7 +118,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 
 function showPosition(position) {
-    var zomato_url = `https://developers.zomato.com/api/v2.1/geocode?lat=${-35.2809}&lon=${149.1300}&count=20`;
+    var zomato_url = `https://developers.zomato.com/api/v2.1/geocode?lat=${position.coords.latitude}&lon=${position.coords.longitude}&count=20`;
 
     var openweathermap_url;
 
